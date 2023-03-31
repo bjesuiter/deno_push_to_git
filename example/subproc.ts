@@ -1,3 +1,5 @@
-const cmd = new Deno.Command("/usr/bin/env git -v");
+const cmd = new Deno.Command("git", {
+    args: ['-v']
+});
 
-await cmd.output();
+cmd.spawn();
