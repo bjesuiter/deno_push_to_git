@@ -1,7 +1,13 @@
-import { Command, HelpCommand, ValidationError } from "./deps/cliffy.ts";
+import {
+  Command,
+  Confirm,
+  HelpCommand,
+  ValidationError,
+} from "./deps/cliffy.ts";
+
 import { VERSION } from "./VERSION.ts";
 
-await new Command()
+const { options, cmd } = await new Command()
   .name("push-to-git")
   .description(`
     Pushes the current branch to an arbitrary branch 
@@ -42,9 +48,103 @@ await new Command()
     console.error(error);
     Deno.exit(error instanceof ValidationError ? error.exitCode : 1);
   })
-  .action(() => {
-    // TODO: run main code 
-    // throw new ValidationError("validation error message.");
-  })
   .command("help", new HelpCommand().global())
   .parse(Deno.args);
+
+// Show Help when no option was passed
+if (Object.keys(options).length < 1) {
+  cmd.showHelp();
+  Deno.exit(0);
+}
+
+// Run the code for push-to-git
+
+// Git address like or git remote name
+// Format: protocol://user@git-repo.address/path.git OR remote-name (like "origin")
+const gitTarget = options.target;
+let gitTargetBranch = options.branch;
+const targetBranchDefault = options.master ? options.master : false;
+const extraOptions = options.extra;
+const force = options.force;
+const dryRun = options.dryRun;
+const isProduction = options.production;
+
+if (gitTarget === undefined) {
+  console.error("Git target address or remote name is missing");
+  Deno.exit(1);
+}
+
+function runGitPush(gitParameters: string[]) {
+  if (dryRun) {
+    console.log("Dry Run finished");
+    // eslint-disable-next-line unicorn/no-process-exit
+    Deno.exit(0);
+  }
+
+  const cmd = new Deno.Command(`git ${gitParameters.join(" ")}`, {
+    stdout: "inherit",
+    stderr: "inherit",
+  });
+
+  const childProcess = cmd.spawn();
+  return childProcess;
+}
+
+// Detect the current branch name
+
+const gitDetectBranchName = new Deno.Command(
+  `/usr/bin/env git rev-parse --abbrev-ref HEAD`,
+  {
+    env: {
+      PATH: Deno.env.get("PATH") ?? "",
+    },
+  },
+);
+
+const currGitBranch = (await gitDetectBranchName.output())
+  .stdout
+  .toString()
+  .trim();
+
+if (!currGitBranch) {
+  console.error("Current git branch is undefined!");
+  Deno.exit(2);
+}
+
+if (gitTargetBranch === undefined) {
+  gitTargetBranch = targetBranchDefault ? "master" : currGitBranch;
+}
+
+console.log(
+  `Push current git branch [${currGitBranch}] to ${gitTargetBranch} of: \n ${gitTarget}`,
+);
+
+const gitParameters = ["push"];
+
+if (force) {
+  gitParameters.push("-f");
+}
+
+if (typeof extraOptions === "string") {
+  gitParameters.push(extraOptions);
+}
+
+gitParameters.push(`${gitTarget}`);
+gitParameters.push(`${currGitBranch}:${gitTargetBranch}`);
+
+console.log(`The exact command is: 
+        git ${gitParameters.join(" ")}`);
+
+if (isProduction) {
+  const proceed = await Confirm.prompt(
+    `CAUTION: You are updating a production branch! Proceed? (yes | NO) `,
+  );
+
+  if (!proceed) {
+    console.log("Push canceled by user");
+    Deno.exit(0);
+  }
+}
+
+const childProcess = runGitPush(gitParameters);
+console.log(await childProcess.output());
