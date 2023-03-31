@@ -23,9 +23,11 @@
   "tasks": {
     "example": "deno run --allow-run=git cli.ts -M -t origin --production --dry-run",
     "example:subproc": "deno run -A ./example/subproc.ts",
+    "example:execa": "deno run -A ./example/execa.ts",
     "start": "deno run cli.ts",
     "start:help": "deno run cli.ts --help",
     "install": "deno install --allow-run=git -n push-to-git https://deno.land/x/git_deploy/cli.ts",
+
     "esm:add": "deno run -A https://esm.sh/v113 add",
     "esm:update": "deno run -A https://esm.sh/v113 update",
     "esm:remove": "deno run -A https://esm.sh/v113 remove"
