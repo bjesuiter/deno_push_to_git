@@ -94,11 +94,21 @@ function runGitPush(gitParameters: string[]) {
 // Detect the current branch name
 
 const gitDetectBranchName = new Deno.Command(`git`, {
-  args: ["rev-parse --abbrev-ref HEAD"],
+  args: ["rev-parse", "--abbrev-ref", "HEAD"],
 });
 
-const currGitBranch = (await gitDetectBranchName.output())
-  .stdout
+const cmdOut = await gitDetectBranchName.output();
+const utf8 = new TextDecoder();
+
+if (!cmdOut.success) {
+  console.error(`Failed to get current branch name!`, {
+    stdout: utf8.decode(cmdOut.stdout),
+    stdErr: utf8.decode(cmdOut.stderr),
+  });
+  Deno.exit(cmdOut.code);
+}
+
+const currGitBranch = utf8.decode(cmdOut.stdout)
   .toString()
   .trim();
 
