@@ -1,3 +1,8 @@
-import { execa } from "npm:execa@latest";
+import { $ } from "npm:execa@latest";
 
-console.log(execa);
+const { stdout: gitVersion } = await $`git -v`;
+console.log(gitVersion);
+
+const { stdout: currBranch } = await $`git rev-parse --abbrev-ref HEAD`;
+console.log(currBranch);
+// "tag": "",
