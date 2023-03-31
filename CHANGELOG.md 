@@ -1,5 +1,10 @@
 # Changelog 
 
+## 2.0.0-preview.2 - 2023-03-31 
+
+- Add installation instructions 
+- Simplify some inner workings by using npm:execa
+
 ## 2.0.0-preview.1 - 2023-03-31 
 
 - Rewrite https://www.npmjs.com/package/push-to-git/v/1.1.4 in deno 
