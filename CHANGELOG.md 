@@ -1,6 +1,6 @@
 # Changelog 
 
-## 2.0.0 - 2023-03-31 
+## 2.0.0-preview.1 - 2023-03-31 
 
 - Rewrite https://www.npmjs.com/package/push-to-git/v/1.1.4 in deno 
 - Rename it to git_deploy, due to deno module convention of not allowing dashes for module names 
