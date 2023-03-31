@@ -1,5 +1,9 @@
 # Changelog 
 
+## 2.0.0-preview.3 - 2023-03-31 
+
+- Use execa package internally for easier scripting
+
 ## 2.0.0-preview.2 - 2023-03-31 
 
 - Add installation instructions 

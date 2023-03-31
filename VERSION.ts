@@ -1,1 +1,1 @@
-export const VERSION = "2.0.0-preview.2";
+export const VERSION = "2.0.0-preview.3";

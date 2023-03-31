@@ -8,13 +8,13 @@ mainly deployed as `git_deploy` on [deno.land/x/git_deploy](deno.land/x/git_depl
 ### Command push-to-git 
 
 ```
-deno install --allow-run=git -n push-to-git https://deno.land/x/git_deploy/cli.ts
+deno install -f --allow-run=git --allow-read --allow-env -n push-to-git https://deno.land/x/git_deploy/cli.ts
 ```
 
 ### Alternatively: Rename Command to git_deploy
 
 ```
-deno install --allow-run=git -n git_deploy https://deno.land/x/git_deploy/cli.ts
+deno install -f --allow-run=git --allow-read --allow-env -n git_deploy https://deno.land/x/git_deploy/cli.ts
 ```
 
 ## How to Use 

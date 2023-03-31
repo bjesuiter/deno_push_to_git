@@ -4,6 +4,7 @@ import {
   HelpCommand,
   ValidationError,
 } from "./deps/cliffy.ts";
+import { $ } from "./deps/execa.ts";
 
 import { VERSION } from "./VERSION.ts";
 
@@ -74,45 +75,21 @@ if (gitTarget === undefined) {
   Deno.exit(1);
 }
 
-function runGitPush(gitParameters: string[]) {
+async function runGitPush(gitParameters: string[]) {
   if (dryRun) {
     console.log("Dry Run finished");
-    // eslint-disable-next-line unicorn/no-process-exit
     Deno.exit(0);
   }
 
-  const cmd = new Deno.Command(`git`, {
-    stdout: "inherit",
-    stderr: "inherit",
-    args: gitParameters,
-  });
-
-  const childProcess = cmd.spawn();
-  return childProcess;
+  const { stdout } = await $`git ${gitParameters.join(" ")}`;
+  return stdout;
 }
 
 // Detect the current branch name
+const { stdout } = await $`git rev-parse --abbrev-ref HEAD`;
+const currGitBranch = stdout.trim();
 
-const gitDetectBranchName = new Deno.Command(`git`, {
-  args: ["rev-parse", "--abbrev-ref", "HEAD"],
-});
-
-const cmdOut = await gitDetectBranchName.output();
-const utf8 = new TextDecoder();
-
-if (!cmdOut.success) {
-  console.error(`Failed to get current branch name!`, {
-    stdout: utf8.decode(cmdOut.stdout),
-    stdErr: utf8.decode(cmdOut.stderr),
-  });
-  Deno.exit(cmdOut.code);
-}
-
-const currGitBranch = utf8.decode(cmdOut.stdout)
-  .toString()
-  .trim();
-
-if (!currGitBranch) {
+if (!currGitBranch || currGitBranch.length < 1) {
   console.error("Current git branch is undefined!");
   Deno.exit(2);
 }
