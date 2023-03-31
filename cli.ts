@@ -81,9 +81,10 @@ function runGitPush(gitParameters: string[]) {
     Deno.exit(0);
   }
 
-  const cmd = new Deno.Command(`git ${gitParameters.join(" ")}`, {
+  const cmd = new Deno.Command(`git`, {
     stdout: "inherit",
     stderr: "inherit",
+    args: gitParameters,
   });
 
   const childProcess = cmd.spawn();
@@ -92,14 +93,9 @@ function runGitPush(gitParameters: string[]) {
 
 // Detect the current branch name
 
-const gitDetectBranchName = new Deno.Command(
-  `/usr/bin/env git rev-parse --abbrev-ref HEAD`,
-  {
-    env: {
-      PATH: Deno.env.get("PATH") ?? "",
-    },
-  },
-);
+const gitDetectBranchName = new Deno.Command(`git`, {
+  args: ["rev-parse --abbrev-ref HEAD"],
+});
 
 const currGitBranch = (await gitDetectBranchName.output())
   .stdout

@@ -21,7 +21,7 @@
      * Docs for Deno Tasks: https://deno.land/manual@v1.27.1/tools/task_runner
      */
   "tasks": {
-    "example": "deno run --allow-run --allow-env cli.ts -M -t origin --production --dry-run",
+    "example": "deno run --allow-run cli.ts -M -t origin --production --dry-run",
     "example:subproc": "deno run -A ./example/subproc.ts",
     "start": "deno run cli.ts",
     "start:help": "deno run cli.ts --help",
