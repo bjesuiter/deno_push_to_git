@@ -4,6 +4,10 @@ import { VERSION } from "./VERSION.ts";
 await new Command()
   .name("push-to-git")
   .version(VERSION)
+  .versionOption(
+    " -v, --version",
+    "Print version info.",
+  )
   .description(`
     Pushes the current branch to an arbitrary branch 
     in the same or in another repository for deployment.
