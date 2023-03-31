@@ -22,6 +22,7 @@
      */
   "tasks": {
     "example": "deno run --allow-run --allow-env cli.ts -M -t origin --production --dry-run",
+    "example:subproc": "deno run -A ./example/subproc.ts",
     "start": "deno run cli.ts",
     "start:help": "deno run cli.ts --help",
     "esm:add": "deno run -A https://esm.sh/v113 add",
