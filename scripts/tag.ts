@@ -3,5 +3,5 @@ import { $ } from "../deps/execa.ts";
 
 // Tags the current commit with the version in VERSION.ts
 
-const { stdout: taggingResult } = await $`git tag ${VERSION}`;
-console.log(taggingResult);
+await $`git tag ${VERSION}`;
+await $`git push --tags`;
