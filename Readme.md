@@ -5,7 +5,17 @@ mainly deployed as `git_deploy` on [deno.land/x/git_deploy](deno.land/x/git_depl
 
 ## How to Install 
 
-TODO 
+### Command push-to-git 
+
+```
+deno install --allow-run=git -n push-to-git https://deno.land/x/git_deploy/cli.ts
+```
+
+### Alternatively: Rename Command to git_deploy
+
+```
+deno install --allow-run=git -n git_deploy https://deno.land/x/git_deploy/cli.ts
+```
 
 ## How to Use 
 
