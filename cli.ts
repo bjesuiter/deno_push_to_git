@@ -1,4 +1,4 @@
-import { Command, HelpCommand } from "./deps/cliffy.ts";
+import { Command, HelpCommand, ValidationError } from "./deps/cliffy.ts";
 import { VERSION } from "./VERSION.ts";
 
 await new Command()
@@ -35,5 +35,16 @@ await new Command()
     "Sets the production flag which triggers additional checks when uploading",
   )
   .option("-f --force", "Forces git push")
+  .error((error, cmd) => {
+    if (error instanceof ValidationError) {
+      cmd.showHelp();
+    }
+    console.error(error);
+    Deno.exit(error instanceof ValidationError ? error.exitCode : 1);
+  })
+  .action(() => {
+    // TODO: run main code 
+    // throw new ValidationError("validation error message.");
+  })
   .command("help", new HelpCommand().global())
   .parse(Deno.args);
