@@ -52,14 +52,21 @@ const { options, cmd } = await new Command()
     Deno.exit(error instanceof ValidationError ? error.exitCode : 1);
   })
   .command("help", new HelpCommand().global())
-  .command(
-    "upgrade",
-    new UpgradeCommand({
-      main: "cli.ts",
-      args: [`-f`, `--allow-run=git`, "--allow-read", "--allow-env"],
-      provider: new DenoLandProvider(),
-    }),
-  )
+  // TODO: Figure out how this upgrade command works
+  // .command(
+  //   "upgrade",
+  //   new UpgradeCommand({
+  //     main: "cli.ts",
+  //     args: [
+  //       `-f`,
+  //       `--allow-run=git`,
+  //       "--allow-read",
+  //       "--allow-env",
+  //       "--allow-net",
+  //     ],
+  //     provider: new DenoLandProvider(),
+  //   }),
+  // )
   .parse(Deno.args);
 
 // Show Help when no option was passed
@@ -139,5 +146,5 @@ if (isProduction) {
   }
 }
 
-const childProcess = runGitPush(gitParameters);
-console.log(await childProcess.output());
+const childOut = runGitPush(gitParameters);
+console.log(await childOut);
