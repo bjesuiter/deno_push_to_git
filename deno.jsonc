@@ -21,7 +21,7 @@
      * Docs for Deno Tasks: https://deno.land/manual@v1.27.1/tools/task_runner
      */
   "tasks": {
-    "example": "deno run --allow-run=git --allow-read --allow-env cli.ts -M -t origin --production --dry-run",
+    "example": "deno task start -M -t origin --production",
     "example:subproc": "deno run -A ./example/subproc.ts",
     "example:execa": "deno run -A ./example/execa.ts",
     "start": "deno run --allow-run=git --allow-read --allow-env --allow-net cli.ts",

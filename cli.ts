@@ -7,6 +7,7 @@ import {
   ValidationError,
 } from "./deps/cliffy.ts";
 import { $ } from "./deps/execa.ts";
+import { exec } from "./src/utils.ts";
 
 import { VERSION } from "./VERSION.ts";
 
@@ -98,7 +99,8 @@ async function runGitPush(gitParameters: string[]) {
     Deno.exit(0);
   }
 
-  const { stdout } = await $`git ${gitParameters.join(" ")}`;
+  // const { stdout } = await $`git ${gitParameters.join(" ")}`;
+  const stdout = await exec("git", gitParameters);
   return stdout;
 }
 
